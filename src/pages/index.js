@@ -2,21 +2,22 @@ import Head from 'next/head'
 import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 import { useDispatch, useSelector } from 'react-redux'
-import { decremented, incremented, fetchCityData, fetchState } from './redux/index.js'
-import { useEffect } from 'react'
+import { decremented, incremented } from './redux/index.js'
+import { fetchCity } from './redux/citySlice.js'
+import { fetchState } from './redux/stateSlice.js'
 export default function Home() {
   const dispatch = useDispatch();
   const count = useSelector(state => state.counter.value)
-  const cityData = useSelector((state) => state.counter.cityNames);
-  const stateData = useSelector((state) => state.counter.allState);
+  const { cityData, status } = useSelector(state => state.cityAllData)
+  const { data: stateData } = useSelector(state => state.stateAllData)
   const heandleCityName = () => {
-    dispatch(fetchCityData());
+    dispatch(fetchCity());
   }
-  // useEffect(()=>{
-  //   dispatch(fetchState());
-  // },[])
   const heandleStateName = () => {
     dispatch(fetchState());
+  }
+  if (status == "loading") {
+    return <h1>{status}</h1>
   }
   return (
     <>
@@ -46,7 +47,7 @@ export default function Home() {
         <ul>
           {cityData?.map((city, key) => (
             <>
-              <li key={key}>{city}</li>
+              <li key={key}>{city?.city_name}</li>
             </>
           ))}
         </ul>
@@ -57,10 +58,10 @@ export default function Home() {
               <>
                 <tr>
                   <td>{++key}</td>
-                  <td key={key} style={{textAlign: 'left'}}>{state.state_name}</td>
+                  <td key={key} style={{ textAlign: 'left' }}>{state.state_name}</td>
                   {state?.status == 1 ?
-                  <td style={{background: "green", color: "white"}}>Active</td>  
-                : <td style={{background: "red", color: "white"}}>Inactive</td>}
+                    <td style={{ background: "green", color: "white" }}>Active</td>
+                    : <td style={{ background: "red", color: "white" }}>Inactive</td>}
                 </tr>
                 <tr>
                 </tr>

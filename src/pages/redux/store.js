@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createCounter from "./index.js"; // Import your root reducer
-import thunk from "redux-thunk"; // Import Redux Thunk
+import citySlice from "./citySlice.js";
+import stateSlice from "./stateSlice.js";
 const store = configureStore({
-    reducer: { counter : createCounter }, // Replace with your root reducer
-    // middleware: [thunk], // Add Redux Thunk middleware
+    reducer: { 
+        counter : createCounter,
+        cityAllData : citySlice, 
+        stateAllData: stateSlice   
+    }, 
 });
 
 export default store;
